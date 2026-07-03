@@ -64,54 +64,18 @@
             width: 700px;
         }
 
+        /* Header Layout for Title and Home button */
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
         h1 {
             font-size: 2rem;
             font-weight: 600;
             letter-spacing: -0.025em;
-            margin-bottom: 2rem;
-        }
-
-        /* App Cards Setup */
-        .app-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 600px) {
-            .app-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .app-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--card-border);
-            padding: 2rem;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s ease;
-        }
-
-        .app-card:hover {
-            transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .app-card h2 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .app-card p {
-            font-size: 0.9rem;
-            color: #9ca3af;
-            margin-bottom: 1.5rem;
-            line-height: 1.4;
         }
 
         /* Interactive Buttons */
@@ -157,6 +121,74 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.15);
             box-shadow: none;
+        }
+
+        /* Clean Home Navigation Link */
+        .btn-home {
+            width: auto;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            box-shadow: none;
+            color: #d1d5db;
+        }
+        .btn-home:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            box-shadow: none;
+        }
+
+        /* App Cards Setup */
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .header-area {
+                flex-direction: column-reverse;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .btn-home {
+                width: 100%;
+                text-align: center;
+            }
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            padding: 2rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .app-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .app-card p {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
         }
 
         /* Overlay / Modal System */
@@ -254,7 +286,11 @@
 <body>
 
     <div class="container">
-        <h1>RemadeRec Applications</h1>
+        <div class="header-area">
+            <h1>RemadeRec Applications</h1>
+            <!-- Home button navigating back up one folder layer -->
+            <a href="../" class="btn btn-home">← Home</a>
+        </div>
         
         <div class="app-grid">
             <!-- Staff App Card -->
@@ -337,7 +373,6 @@
         }
 
         function closeModal(e, id) {
-            // Closes modal if user clicks the blurred overlay backdrop area directly
             if (e.target.id === id) {
                 document.getElementById(id).classList.remove('active');
             }
@@ -353,7 +388,6 @@
             submitBtn.disabled = true;
             submitBtn.innerText = "Sending...";
 
-            // Gather inputs
             const discordUser = document.getElementById('discordTag').value;
             const answers = [
                 { q: "Why do you want to be a beta tester?", a: document.getElementById('q1').value },
@@ -363,11 +397,10 @@
                 { q: "Where do you see yourself in the future with RemadeRec?", a: document.getElementById('q5').value }
             ];
 
-            // Build a clean Discord rich Embed payload
             const payload = {
                 embeds: [{
                     title: "✨ New Beta Tester Application",
-                    color: 6513919, // Hex matching indigo/purple mix
+                    color: 6513919,
                     timestamp: new Date().toISOString(),
                     fields: [
                         { name: "Applicant Discord", value: discordUser, inline: false },
@@ -381,7 +414,6 @@
                 }]
             };
 
-            // Send standard POST request directly to Discord
             fetch(webhookURL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
