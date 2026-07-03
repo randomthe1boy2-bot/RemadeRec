@@ -1,1 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RemadeRec - Applications</title>
+    <style>
+        /* Modern CSS Reset & Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
+        :root {
+            --bg-color: #0b0c10;
+            --text-color: #f3f4f6;
+            --accent-gradient: linear-gradient(135deg, #6366f1, #a855f7);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --input-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Subtle background glow for depth */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--accent-gradient);
+            filter: blur(140px);
+            opacity: 0.12;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Main Grid Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            max-width: 100%;
+            width: 700px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+            margin-bottom: 2rem;
+        }
+
+        /* App Cards Setup */
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            .app-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            padding: 2rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .app-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .app-card p {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        /* Interactive Buttons */
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #ffffff;
+            background: var(--accent-gradient);
+            padding: 0.7rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: none;
+            color: #e5e7eb;
+            margin-top: 0.5rem;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: none;
+        }
+
+        /* Overlay / Modal System */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: #12131a;
+            border: 1px solid var(--card-border);
+            padding: 2.5rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        /* Form styling */
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #d1d5db;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #6366f1;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>RemadeRec Applications</h1>
+        
+        <div class="app-grid">
+            <!-- Staff App Card -->
+            <div class="app-card">
+                <div>
+                    <h2>Staff Application</h2>
+                    <p>Join the team and help moderate and manage the RemadeRec ecosystem.</p>
+                </div>
+                <button class="btn" onclick="openModal('staffModal')">Apply Now</button>
+            </div>
+
+            <!-- Beta Tester Card -->
+            <div class="app-card">
+                <div>
+                    <h2>Beta Tester</h2>
+                    <p>Get early access to builds, hunt bugs, and provide structural feature feedback.</p>
+                </div>
+                <button class="btn" onclick="openModal('betaModal')">Apply Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Overlay System -->
+    <div class="overlay" id="staffModal" onclick="closeModal(event, 'staffModal')">
+        <div class="modal">
+            <h3>Staff Application</h3>
+            <p style="margin-bottom: 2rem; color: #f97316; font-weight: 500;">Sorry but this Application is not available.</p>
+            <button class="btn btn-secondary" onclick="document.getElementById('staffModal').classList.remove('active')">Close</button>
+        </div>
+    </div>
+
+    <!-- Beta Tester Form Overlay System -->
+    <div class="overlay" id="betaModal" onclick="closeModal(event, 'betaModal')">
+        <div class="modal">
+            <h3>Beta Tester Application</h3>
+            <div id="errorBox" class="error-msg"></div>
+            
+            <form id="betaForm" onsubmit="submitApplication(event)">
+                <div class="form-group">
+                    <label for="discordTag">Your Discord Username / Tag</label>
+                    <input type="text" id="discordTag" required placeholder="e.g. username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="q1">Why do you want to be a beta tester?</label>
+                    <textarea id="q1" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="q2">Why should we hire you over others?</label>
+                    <textarea id="q2" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="q3">What skills do you have that will help us?</label>
+                    <textarea id="q3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="q4">What goals do you have for RemadeRec?</label>
+                    <textarea id="q4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="q5">Where do you see yourself in the future with RemadeRec?</label>
+                    <textarea id="q5" required></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn">Submit Application</button>
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('betaModal').classList.remove('active')">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const webhookURL = "https://discord.com/api/webhooks/1522394888900182107/j0HjZ6Zv3rSTG9gN5zSEP1qHptiYN7Mq42GtNKD2lEVXBYSjjc2P0xVD4I76bUf1Hs-d";
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(e, id) {
+            // Closes modal if user clicks the blurred overlay backdrop area directly
+            if (e.target.id === id) {
+                document.getElementById(id).classList.remove('active');
+            }
+        }
+
+        function submitApplication(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const errorBox = document.getElementById('errorBox');
+            
+            errorBox.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Sending...";
+
+            // Gather inputs
+            const discordUser = document.getElementById('discordTag').value;
+            const answers = [
+                { q: "Why do you want to be a beta tester?", a: document.getElementById('q1').value },
+                { q: "Why should we hire you over others?", a: document.getElementById('q2').value },
+                { q: "What skills do you have that will help us?", a: document.getElementById('q3').value },
+                { q: "What goals do you have for RemadeRec?", a: document.getElementById('q4').value },
+                { q: "Where do you see yourself in the future with RemadeRec?", a: document.getElementById('q5').value }
+            ];
+
+            // Build a clean Discord rich Embed payload
+            const payload = {
+                embeds: [{
+                    title: "✨ New Beta Tester Application",
+                    color: 6513919, // Hex matching indigo/purple mix
+                    timestamp: new Date().toISOString(),
+                    fields: [
+                        { name: "Applicant Discord", value: discordUser, inline: false },
+                        ...answers.map(item => ({
+                            name: `🔹 ${item.q}`,
+                            value: item.a || "No response provided.",
+                            inline: false
+                        }))
+                    ],
+                    footer: { text: "RemadeRec Application Center System" }
+                }]
+            };
+
+            // Send standard POST request directly to Discord
+            fetch(webhookURL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Application submitted successfully!");
+                    document.getElementById('betaForm').reset();
+                    document.getElementById('betaModal').classList.remove('active');
+                } else {
+                    throw new Error("Network status issue encountered.");
+                }
+            })
+            .catch(err => {
+                errorBox.innerText = "Failed to send application. Please try again.";
+                errorBox.style.display = 'block';
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Submit Application";
+            });
+        }
+    </script>
+</body>
+</html>
