@@ -7,7 +7,8 @@
     <meta property="og:title" content="RemadeRec's Official Website" />
     <meta property="og:description" content="Welcome to the hub for everything RemadeRec. Apply for staff or tester roles and explore the ecosystem." />
     <meta property="og:url" content="https://randomthe1boy2-bot.github.io/RemadeRec/" />
-    <meta name="theme-color" content="#6366f1"> <title>RemadeRec - Test Website</title>
+    <meta name="theme-color" content="#6366f1"> 
+    <title>RemadeRec - Test Website</title>
     <style>
         /* Modern CSS Reset & Variables */
         * {
@@ -76,9 +77,18 @@
             line-height: 1.4;
         }
 
+        /* Button Grid Layout */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
         /* Interactive Button */
         .btn {
-            display: inline-block;
+            display: block;
+            width: 100%;
             text-decoration: none;
             color: #ffffff;
             background: var(--accent-gradient);
@@ -86,8 +96,17 @@
             font-size: 1rem;
             font-weight: 500;
             border-radius: 8px;
+            border: none;
+            cursor: pointer;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
             transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+
+        /* Secondary Button Variation */
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            box-shadow: none;
         }
 
         /* Hover & Active States */
@@ -96,9 +115,107 @@
             box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
         }
 
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+        }
+
         .btn:active {
             transform: translateY(0);
             opacity: 0.9;
+        }
+
+        /* Overlay / Modal Styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: #12131a;
+            border: 1px solid var(--card-border);
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+
+        .modal h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal p {
+            font-size: 0.95rem;
+            color: #9ca3af;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Modal Forms Layout */
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            color: #9ca3af;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #6366f1;
+        }
+
+        /* Close window button hook */
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #fff;
         }
     </style>
 </head>
@@ -106,8 +223,122 @@
 
     <div class="container">
         <h1>Welcome to the Test Website for RemadeRec!</h1>
-        <a href="https://randomthe1boy2-bot.github.io/RemadeRec/applications" class="btn">Applications</a>
+        <div class="button-group">
+            <a href="https://randomthe1boy2-bot.github.io/RemadeRec/applications" class="btn">Applications</a>
+            <button class="btn" id="signupTrigger">Sign Up</button>
+            <button class="btn btn-secondary" id="loginTrigger">Log In</button>
+        </div>
     </div>
 
+    <div class="overlay" id="loginOverlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeOverlay('loginOverlay')">&times;</button>
+            <h2>Feature Unavailable</h2>
+            <p>Sorry but this feature doesnt work currently. this website is in active development! come back later!</p>
+            <button class="btn" onclick="closeOverlay('loginOverlay')">Understood</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="signupOverlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeOverlay('signupOverlay')">&times;</button>
+            <h2>Create Account</h2>
+            <p>Join the RemadeRec ecosystem ecosystem development phase.</p>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn" id="submitSignup">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const loginTrigger = document.getElementById('loginTrigger');
+        const signupTrigger = document.getElementById('signupTrigger');
+        const loginOverlay = document.getElementById('loginOverlay');
+        const signupOverlay = document.getElementById('signupOverlay');
+        const signupForm = document.getElementById('signupForm');
+
+        // Open Overlay Helper
+        function openOverlay(overlay) {
+            overlay.classList.add('active');
+        }
+
+        // Close Overlay Helper
+        function closeOverlay(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // Click outside modal to close option
+        window.onclick = function(event) {
+            if (event.target.classList.contains('overlay')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Event Listeners for main page buttons
+        loginTrigger.addEventListener('click', () => openOverlay(loginOverlay));
+        signupTrigger.addEventListener('click', () => openOverlay(signupOverlay));
+
+        // Submit Sign-Up to Discord Webhook
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailValue = document.getElementById('email').value;
+            const usernameValue = document.getElementById('username').value;
+            const submitBtn = document.getElementById('submitSignup');
+
+            // Visual feedback during delivery
+            submitBtn.innerText = "Processing...";
+            submitBtn.disabled = true;
+
+            const webhookUrl = "https://discord.com/api/webhooks/1523822513942167744/sjeGq6Nb69s_UYw6Jn3BZ2wKTNEiKwCc4dKxeghnfe-1x7SMcoAcUjJsr7Gqkn8gIaZa";
+
+            // Discord Webhook Data Payload Structure
+            const payload = {
+                embeds: [{
+                    title: "🔔 New Registration Log",
+                    color: 6514929, // Matches your theme hex (#6366f1 converted to decimal)
+                    fields: [
+                        { name: "Email", value: emailValue, inline: true },
+                        { name: "Username", value: usernameValue, inline: true }
+                    ],
+                    timestamp: new Date().toISOString(),
+                    footer: { text: "RemadeRec Automated Web Logging" }
+                }]
+            };
+
+            // Post request payload dispatch
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                alert("Sign-up process initialized! Information updated.");
+                signupForm.reset();
+                closeOverlay('signupOverlay');
+            })
+            .catch(err => {
+                console.error("Transmission Error: ", err);
+                alert("Failed to sync registration profile data with server endpoint.");
+            })
+            .finally(() => {
+                submitBtn.innerText = "Register";
+                submitBtn.disabled = false;
+            });
+        });
+    </script>
 </body>
 </html>
