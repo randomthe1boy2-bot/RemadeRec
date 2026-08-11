@@ -1,437 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemadeRec - Applications</title>
-    <style>
-        /* Modern CSS Reset & Variables */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website Shut Down</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        :root {
-            --bg-color: #0b0c10;
-            --text-color: #f3f4f6;
-            --accent-gradient: linear-gradient(135deg, #6366f1, #a855f7);
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --input-bg: rgba(255, 255, 255, 0.05);
-        }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem;
+      overflow: hidden;
+      position: relative;
+    }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 20px;
-        }
+    /* Ambient Background Glows */
+    .glow-1, .glow-2 {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.25;
+      z-index: 0;
+    }
 
-        /* Subtle background glow for depth */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: var(--accent-gradient);
-            filter: blur(140px);
-            opacity: 0.12;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
-            pointer-events: none;
-        }
+    .glow-1 {
+      width: 350px;
+      height: 350px;
+      background: #6366f1;
+      top: 20%;
+      left: 20%;
+    }
 
-        /* Main Grid Container */
-        .container {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            padding: 2.5rem;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
-            max-width: 100%;
-            width: 700px;
-        }
+    .glow-2 {
+      width: 300px;
+      height: 300px;
+      background: #06b6d4;
+      bottom: 20%;
+      right: 20%;
+    }
 
-        /* Header Layout for Title and Home button */
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
+    /* Main Content Box */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 520px;
+      width: 100%;
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.25rem;
+      padding: 3rem 2rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    }
 
-        h1 {
-            font-size: 2rem;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-        }
+    /* Shutdown Badge/Icon */
+    .icon-wrapper {
+      width: 64px;
+      height: 64px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem auto;
+    }
 
-        /* Interactive Buttons */
-        .btn {
-            display: inline-block;
-            text-decoration: none;
-            color: #ffffff;
-            background: var(--accent-gradient);
-            padding: 0.7rem 1.5rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-            width: 100%;
-        }
+    .title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: -0.02em;
+    }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
-        }
+    .description {
+      margin-top: 1rem;
+      color: #94a3b8;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
 
-        .btn:active {
-            transform: translateY(0);
-            opacity: 0.9;
-        }
+    .description a.inline-link {
+      color: #818cf8;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: color 0.2s ease;
+    }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
+    .description a.inline-link:hover {
+      color: #a5b4fc;
+    }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: none;
-            color: #e5e7eb;
-            margin-top: 0.5rem;
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: none;
-        }
+    /* Primary Action Button */
+    .actions {
+      margin-top: 2.25rem;
+    }
 
-        /* Clean Home Navigation Link */
-        .btn-home {
-            width: auto;
-            padding: 0.5rem 1.2rem;
-            font-size: 0.9rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--card-border);
-            box-shadow: none;
-            color: #d1d5db;
-        }
-        .btn-home:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            box-shadow: none;
-        }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 0.6rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-size: 1rem;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.35);
+    }
 
-        /* App Cards Setup */
-        .app-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.5);
+    }
 
-        @media (max-width: 600px) {
-            .header-area {
-                flex-direction: column-reverse;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-            .btn-home {
-                width: 100%;
-                text-align: center;
-            }
-            .app-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+    .btn svg {
+      transition: transform 0.2s ease;
+    }
 
-        .app-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--card-border);
-            padding: 2rem;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s ease;
-        }
+    .btn:hover svg {
+      transform: translateX(3px);
+    }
 
-        .app-card:hover {
-            transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .app-card h2 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .app-card p {
-            font-size: 0.9rem;
-            color: #9ca3af;
-            margin-bottom: 1.5rem;
-            line-height: 1.4;
-        }
-
-        /* Overlay / Modal System */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 10;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            padding: 20px;
-        }
-
-        .overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal {
-            background: #12131a;
-            border: 1px solid var(--card-border);
-            padding: 2.5rem;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 550px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .overlay.active .modal {
-            transform: scale(1);
-        }
-
-        .modal h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            text-align: left;
-        }
-
-        /* Form styling */
-        .form-group {
-            margin-bottom: 1.25rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            color: #d1d5db;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            background: var(--input-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 0.75rem;
-            color: #ffffff;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #6366f1;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .error-msg {
-            color: #ef4444;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            display: none;
-        }
-    </style>
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .container { padding: 2rem 1.25rem; }
+      .title { font-size: 1.5rem; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header-area">
-            <h1>RemadeRec Applications</h1>
-            <a href="https://www.remaderec.org/" class="btn btn-home">← Home</a>
-        </div>
-        
-        <div class="app-grid">
-            <div class="app-card">
-                <div>
-                    <h2>Staff Application</h2>
-                    <p>Join the team and help moderate and manage the RemadeRec ecosystem.</p>
-                </div>
-                <button class="btn" onclick="openModal('staffModal')">Apply Now</button>
-            </div>
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
 
-            <div class="app-card">
-                <div>
-                    <h2>Beta Tester</h2>
-                    <p>Get early access to builds, hunt bugs, and provide structural feature feedback.</p>
-                </div>
-                <button class="btn" onclick="openModal('betaModal')">Apply Now</button>
-            </div>
-        </div>
+  <main class="container">
+    <div class="icon-wrapper">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
     </div>
 
-    <div class="overlay" id="staffModal" onclick="closeModal(event, 'staffModal')">
-        <div class="modal">
-            <h3>Staff Application</h3>
-            <p style="margin-bottom: 2rem; color: #f97316; font-weight: 500;">Sorry but this Application is not available.</p>
-            <button class="btn btn-secondary" onclick="document.getElementById('staffModal').classList.remove('active')">Close</button>
-        </div>
+    <h1 class="title">Website Offline</h1>
+    
+    <p class="description">
+      Sorry, but this website has been shut down. Feel free to visit <a href="https://www.turbov.dev" class="inline-link">www.turbov.dev</a>!
+    </p>
+
+    <div class="actions">
+      <a href="https://www.turbov.dev" class="btn">
+        Visit www.turbov.dev
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
     </div>
+  </main>
 
-    <div class="overlay" id="betaModal" onclick="closeModal(event, 'betaModal')">
-        <div class="modal">
-            <h3>Beta Tester Application</h3>
-            <div id="errorBox" class="error-msg"></div>
-            
-            <form id="betaForm" onsubmit="submitApplication(event)">
-                <div class="form-group">
-                    <label for="discordTag">Your Discord Username / Tag</label>
-                    <input type="text" id="discordTag" required placeholder="e.g. username">
-                </div>
-                
-                <div class="form-group">
-                    <label for="q1">Why do you want to be a beta tester?</label>
-                    <textarea id="q1" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="q2">Why should we hire you over others?</label>
-                    <textarea id="q2" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="q3">What skills do you have that will help us?</label>
-                    <textarea id="q3" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="q4">What goals do you have for RemadeRec?</label>
-                    <textarea id="q4" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="q5">Where do you see yourself in the future with RemadeRec?</label>
-                    <textarea id="q5" required></textarea>
-                </div>
-
-                <button type="submit" id="submitBtn" class="btn">Submit Application</button>
-                <button type="button" class="btn btn-secondary" onclick="document.getElementById('betaModal').classList.remove('active')">Cancel</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        const webhookURL = "https://discord.com/api/webhooks/1522394888900182107/j0HjZ6Zv3rSTG9gN5zSEP1qHptiYN7Mq42GtNKD2lEVXBYSjjc2P0xVD4I76bUf1Hs-d";
-
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-
-        function closeModal(e, id) {
-            if (e.target.id === id) {
-                document.getElementById(id).classList.remove('active');
-            }
-        }
-
-        function submitApplication(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const errorBox = document.getElementById('errorBox');
-            
-            errorBox.style.display = 'none';
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Sending...";
-
-            const discordUser = document.getElementById('discordTag').value;
-            const answers = [
-                { q: "Why do you want to be a beta tester?", a: document.getElementById('q1').value },
-                { q: "Why should we hire you over others?", a: document.getElementById('q2').value },
-                { q: "What skills do you have that will help us?", a: document.getElementById('q3').value },
-                { q: "What goals do you have for RemadeRec?", a: document.getElementById('q4').value },
-                { q: "Where do you see yourself in the future with RemadeRec?", a: document.getElementById('q5').value }
-            ];
-
-            const payload = {
-                embeds: [{
-                    title: "✨ New Beta Tester Application",
-                    color: 6513919,
-                    timestamp: new Date().toISOString(),
-                    fields: [
-                        { name: "Applicant Discord", value: discordUser, inline: false },
-                        ...answers.map(item => ({
-                            name: `🔹 ${item.q}`,
-                            value: item.a || "No response provided.",
-                            inline: false
-                        }))
-                    ],
-                    footer: { text: "RemadeRec Application Center System" }
-                }]
-            };
-
-            fetch(webhookURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert("Application submitted successfully!");
-                    document.getElementById('betaForm').reset();
-                    document.getElementById('betaModal').classList.remove('active');
-                } else {
-                    throw new Error("Network status issue encountered.");
-                }
-            })
-            .catch(err => {
-                errorBox.innerText = "Failed to send application. Please try again.";
-                errorBox.style.display = 'block';
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Submit Application";
-            });
-        }
-    </script>
 </body>
 </html>
